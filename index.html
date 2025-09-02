@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>絵文字ジェネレーター</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&family=Noto+Sans+JP:wght@700&family=Shippori+Mincho:wght@700&family=Yusei+Magic&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-xl mx-auto bg-white rounded-2xl shadow-xl p-5 md:p-6">
+        <header class="mb-4 text-center">
+            <h1 class="text-3xl md:text-4xl font-extrabold pb-2 bg-gradient-to-r from-purple-500 to-blue-600 bg-clip-text text-transparent">
+                絵文字ジェネレーター
+            </h1>
+        </header>
+
+        <div class="mb-6 space-y-4">
+            <!-- Row 1: Preview and Text Input -->
+            <div class="flex items-stretch justify-center gap-4 w-3/5 mx-auto">
+                <!-- Preview Box -->
+                <div class="w-1/2 space-y-2">
+                    <h2 class="text-base font-bold text-gray-700 text-center">preview</h2>
+                    <canvas id="preview-canvas" width="128" height="128" class="border-2 border-gray-300 w-full h-auto aspect-square rounded-lg"></canvas>
+                </div>
+
+                <!-- Text Input Box -->
+                <div class="w-1/2 space-y-2 flex flex-col">
+                    <label for="text-input" class="text-base font-bold text-gray-700 text-center">何を作る？✏️</label>
+                    <textarea id="text-input" class="w-full flex-grow px-3 py-2 text-center text-2xl border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"></textarea>
+                </div>
+            </div>
+
+            <!-- Download Button -->
+            <a id="download-link" href="#" download="emoji.png" class="w-full inline-flex items-center justify-center p-3 text-lg rounded-lg font-bold text-white bg-gradient-to-r from-purple-500 to-blue-600 border-b-4 border-purple-700 hover:brightness-110 active:border-b-0 active:translate-y-1 focus:outline-none focus:ring-4 focus:ring-purple-300 transition-all duration-150 transform" aria-label="画像をダウンロード">
+                <span>ダウンロード</span>
+                <svg class="w-6 h-6 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 10-1.09-1.03l-2.955 3.129V2.75z"></path>
+                    <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z"></path>
+                </svg>
+            </a>
+        </div>
+      
+        <div>
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex" aria-label="Tabs">
+                    <button type="button" data-tab="TextColor" class="tab-button flex-1 whitespace-nowrap border-b-2 py-4 text-sm font-medium transition-colors text-center">
+                        文字色
+                        <span class="text-xs text-color-disabled-label" style="display: none;"> (背景設定中)</span>
+                    </button>
+                    <button type="button" data-tab="Font" class="tab-button flex-1 whitespace-nowrap border-b-2 py-4 text-sm font-medium transition-colors text-center">
+                        フォント
+                    </button>
+                    <button type="button" data-tab="BackgroundColor" class="tab-button flex-1 whitespace-nowrap border-b-2 py-4 text-sm font-medium transition-colors text-center">
+                        背景色
+                    </button>
+                </nav>
+            </div>
+            <div class="py-4 h-40">
+                <div id="textcolor-panel" class="tab-panel">
+                    <div class="space-y-2 text-left">
+                        <p class="text-sm text-gray-500">好きな色を選ぶ</p>
+                        <div class="flex flex-wrap gap-3">
+                            <button type="button" class="text-color-button w-10 h-10 rounded-full shadow-sm transition bg-white border-2 border-gray-200 flex items-center justify-center" data-color="#3b82f6"><span class="text-2xl font-bold text-blue-500">A</span></button>
+                            <button type="button" class="text-color-button w-10 h-10 rounded-full shadow-sm transition bg-white border-2 border-gray-200 flex items-center justify-center" data-color="#ef4444"><span class="text-2xl font-bold text-red-500">A</span></button>
+                            <button type="button" class="text-color-button w-10 h-10 rounded-full shadow-sm transition bg-white border-2 border-gray-200 flex items-center justify-center" data-color="#0d9488"><span class="text-2xl font-bold text-teal-600">A</span></button>
+                            <button type="button" class="text-color-button w-10 h-10 rounded-full shadow-sm transition bg-white border-2 border-gray-200 flex items-center justify-center" data-color="#f97316"><span class="text-2xl font-bold text-orange-500">A</span></button>
+                            <button type="button" class="text-color-button w-10 h-10 rounded-full shadow-sm transition bg-white border-2 border-gray-200 flex items-center justify-center" data-color="#38bdf8"><span class="text-2xl font-bold text-sky-400">A</span></button>
+                            <button type="button" class="text-color-button w-10 h-10 rounded-full shadow-sm transition bg-white border-2 border-gray-200 flex items-center justify-center" data-color="#ec4899"><span class="text-2xl font-bold text-pink-500">A</span></button>
+                            <button type="button" class="text-color-button w-10 h-10 rounded-full shadow-sm transition bg-white border-2 border-gray-200 flex items-center justify-center" data-color="#8b5cf6"><span class="text-2xl font-bold text-violet-500">A</span></button>
+                            <button type="button" class="text-color-button w-10 h-10 rounded-full shadow-sm transition bg-white border-2 border-gray-200 flex items-center justify-center" data-color="#000000"><span class="text-2xl font-bold text-black">A</span></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="font-panel" class="tab-panel" style="display: none;">
+                    <div class="space-y-2 text-left">
+                        <p class="text-sm text-gray-500">好きなフォントを選ぶ</p>
+                        <div class="grid grid-cols-4 gap-3">
+                            <button type="button" class="font-button w-full py-3 border-2 rounded-lg transition-colors text-sm font-rounded-mplus" data-font="'M PLUS Rounded 1c', sans-serif">まるゴ</button>
+                            <button type="button" class="font-button w-full py-3 border-2 rounded-lg transition-colors text-sm font-noto-sans-jp" data-font="'Noto Sans JP', sans-serif">ゴシック</button>
+                            <button type="button" class="font-button w-full py-3 border-2 rounded-lg transition-colors text-sm font-shippori-mincho" data-font="'Shippori Mincho', serif">明朝</button>
+                            <button type="button" class="font-button w-full py-3 border-2 rounded-lg transition-colors text-sm font-yusei-magic" data-font="'Yusei Magic', sans-serif">手書き風</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="backgroundcolor-panel" class="tab-panel" style="display: none;">
+                    <div class="space-y-2 text-left">
+                        <p class="text-sm text-gray-500">好きな背景色を選ぶ</p>
+                        <div class="flex flex-wrap gap-3">
+                            <button type="button" class="bg-color-button w-10 h-10 rounded-full shadow-sm transition border-2 checkerboard-bg border-gray-300 flex items-center justify-center" data-color="#FFFFFF"></button>
+                            <button type="button" class="bg-color-button w-10 h-10 rounded-full shadow-sm transition border-2 border-transparent bg-blue-500 flex items-center justify-center" data-color="#3b82f6"><span class="text-2xl font-bold text-white">A</span></button>
+                            <button type="button" class="bg-color-button w-10 h-10 rounded-full shadow-sm transition border-2 border-transparent bg-red-500 flex items-center justify-center" data-color="#ef4444"><span class="text-2xl font-bold text-white">A</span></button>
+                            <button type="button" class="bg-color-button w-10 h-10 rounded-full shadow-sm transition border-2 border-transparent bg-teal-600 flex items-center justify-center" data-color="#0d9488"><span class="text-2xl font-bold text-white">A</span></button>
+                            <button type="button" class="bg-color-button w-10 h-10 rounded-full shadow-sm transition border-2 border-transparent bg-amber-500 flex items-center justify-center" data-color="#f59e0b"><span class="text-2xl font-bold text-white">A</span></button>
+                            <button type="button" class="bg-color-button w-10 h-10 rounded-full shadow-sm transition border-2 border-transparent bg-violet-500 flex items-center justify-center" data-color="#8b5cf6"><span class="text-2xl font-bold text-white">A</span></button>
+                            <button type="button" class="bg-color-button w-10 h-10 rounded-full shadow-sm transition border-2 border-transparent bg-pink-500 flex items-center justify-center" data-color="#ec4899"><span class="text-2xl font-bold text-white">A</span></button>
+                            <button type="button" class="bg-color-button w-10 h-10 rounded-full shadow-sm transition border-2 border-transparent bg-gray-800 flex items-center justify-center" data-color="#1f2937"><span class="text-2xl font-bold text-white">A</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="index.js" defer></script>
+</body>
+</html>
